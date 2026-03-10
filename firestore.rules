@@ -22,7 +22,7 @@ service cloud.firestore {
       allow create: if isSignedIn() 
                     && request.resource.data.authorId == request.auth.uid;
       
-      // Only post author can update their post
+      // Only post author can update their post (for likes, upvotes, etc.)
       allow update: if isOwner(resource.data.authorId);
       
       // Only post author can delete their post
@@ -46,3 +46,6 @@ service cloud.firestore {
     }
   }
 }
+
+// Note: This app uses Imgur for image hosting (free, unlimited storage)
+// No Firebase Storage rules needed!

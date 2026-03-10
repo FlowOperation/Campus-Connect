@@ -12,7 +12,8 @@ A modern Flutter app for students to share notes, announcements, jobs, and campu
 - 🔐 **Authentication**: Google Sign-In (FAST NUCES emails only)
 - 🏠 **Feed Page**: Browse all posts with category badges
 - 📝 **Add Post**: Create new posts with title, description, and category
-- 🔍 **Category Filter**: Filter posts by Notes, Jobs, Events, Lost & Found, and Announcements
+- � **Image Upload**: Attach images to posts from gallery or camera
+- �🔍 **Category Filter**: Filter posts by Notes, Jobs, Events, Lost & Found, and Announcements
 - 🔎 **Search**: Search posts by title or description
 - 👍 **Upvote/Downvote**: Reddit-style voting system with score calculation
 - 📊 **Sort Options**: Sort by Most Popular, Most Recent, or Oldest First

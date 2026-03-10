@@ -104,7 +104,9 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
       }
 
       // Create post with or without image
-      await ref.read(firestoreServiceProvider).addPost(
+      await ref
+          .read(firestoreServiceProvider)
+          .addPost(
             title: _titleController.text.trim(),
             description: _descriptionController.text.trim(),
             category: _selectedCategory,
@@ -282,7 +284,11 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
               OutlinedButton.icon(
                 onPressed: _isLoading ? null : _showImageSourceDialog,
                 icon: const Icon(Icons.add_photo_alternate),
-                label: Text(_selectedImage == null ? 'Add Image (Optional)' : 'Change Image'),
+                label: Text(
+                  _selectedImage == null
+                      ? 'Add Image (Optional)'
+                      : 'Change Image',
+                ),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(

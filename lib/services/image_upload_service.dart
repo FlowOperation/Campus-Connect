@@ -1,14 +1,20 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:uuid/uuid.dart';
 
 class ImageUploadService {
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final ImagePicker _picker = ImagePicker();
-  final _uuid = const Uuid();
 
-  // Pick image from gallery
+  // Cloudinary Configuration
+  // TODO: Replace these with your Cloudinary credentials
+  // Get them from: https://cloudinary.com/console
+  static const String _cloudName = 'duxdxdovl';
+  static const String _uploadPreset = 'campus_connect_posts';
+
+  String get _uploadUrl =>
+      'https://api.cloudinary.com/v1_1/$_cloudName/image/upload';
+
   Future<File?> pickImageFromGallery() async {
     try {
       final XFile? image = await _picker.pickImage(
@@ -17,7 +23,6 @@ class ImageUploadService {
         maxHeight: 1920,
         imageQuality: 85,
       );
-
       if (image != null) {
         return File(image.path);
       }
@@ -28,7 +33,6 @@ class ImageUploadService {
     }
   }
 
-  // Pick image from camera
   Future<File?> pickImageFromCamera() async {
     try {
       final XFile? image = await _picker.pickImage(
@@ -37,7 +41,6 @@ class ImageUploadService {
         maxHeight: 1920,
         imageQuality: 85,
       );
-
       if (image != null) {
         return File(image.path);
       }
@@ -48,56 +51,51 @@ class ImageUploadService {
     }
   }
 
-  // Upload image to Firebase Storage
   Future<String?> uploadPostImage(File imageFile, String userId) async {
     try {
-      // Create unique filename
-      final String fileName = '${_uuid.v4()}.jpg';
-      final String filePath = 'posts/$userId/$fileName';
+      if (_cloudName == 'YOUR_CLOUD_NAME' ||
+          _uploadPreset == 'YOUR_UPLOAD_PRESET') {
+        print('Error: Please configure Cloudinary credentials');
+        print('See CLOUDINARY_SETUP.md for instructions');
+        return null;
+      }
 
-      // Create reference
-      final Reference ref = _storage.ref().child(filePath);
+      final request = http.MultipartRequest('POST', Uri.parse(_uploadUrl));
+      request.fields['upload_preset'] = _uploadPreset;
+      request.fields['folder'] = 'campus_connect/posts';
 
-      // Upload file
-      final UploadTask uploadTask = ref.putFile(
-        imageFile,
-        SettableMetadata(
-          contentType: 'image/jpeg',
-          customMetadata: {'userId': userId},
-        ),
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      request.fields['public_id'] = '${userId}_$timestamp';
+
+      final imageBytes = await imageFile.readAsBytes();
+      final multipartFile = http.MultipartFile.fromBytes(
+        'file',
+        imageBytes,
+        filename: 'post_image.jpg',
       );
+      request.files.add(multipartFile);
 
-      // Wait for upload to complete
-      final TaskSnapshot snapshot = await uploadTask;
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
-      // Get download URL
-      final String downloadUrl = await snapshot.ref.getDownloadURL();
-
-      return downloadUrl;
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final imageUrl = jsonResponse['secure_url'] as String;
+        print('Image uploaded successfully: $imageUrl');
+        return imageUrl;
+      } else {
+        print('Cloudinary upload failed: ${response.statusCode}');
+        print('Response: ${response.body}');
+        return null;
+      }
     } catch (e) {
-      print('Error uploading image: $e');
+      print('Error uploading image to Cloudinary: $e');
       return null;
     }
   }
 
-  // Delete image from Firebase Storage
   Future<bool> deletePostImage(String imageUrl) async {
-    try {
-      final Reference ref = _storage.refFromURL(imageUrl);
-      await ref.delete();
-      return true;
-    } catch (e) {
-      print('Error deleting image: $e');
-      return false;
-    }
-  }
-
-  // Show image source selection dialog
-  Future<File?> showImageSourceDialog({
-    required Function() onCameraSelected,
-    required Function() onGallerySelected,
-  }) async {
-    // This will be called from UI, returning the file
-    return null;
+    print('Note: Image deletion requires Cloudinary API authentication');
+    return false;
   }
 }

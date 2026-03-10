@@ -149,6 +149,37 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   Text(widget.post.title, style: AppTextStyles.heading1),
                   const SizedBox(height: AppSpacing.md),
                   Text(widget.post.description, style: AppTextStyles.body1),
+                  const SizedBox(height: AppSpacing.md),
+
+                  // Post image
+                  if (widget.post.imageUrl != null) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.post.imageUrl!,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            height: 300,
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 300,
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.error),
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
 
                   // Action buttons

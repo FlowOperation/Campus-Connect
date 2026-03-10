@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBTT_gW_lzMc_dIXBvYhweDj4hrCSv9WMw',
-    appId: '1:746751594801:android:632bf8e3f20d551f472010',
-    messagingSenderId: '746751594801',
-    projectId: 'campus-reddit',
-    storageBucket: 'campus-reddit.firebasestorage.app',
+    apiKey: 'REPLACE_WITH_ANDROID_API_KEY',
+    appId: 'REPLACE_WITH_ANDROID_APP_ID',
+    messagingSenderId: 'REPLACE_WITH_MESSAGING_SENDER_ID',
+    projectId: 'REPLACE_WITH_PROJECT_ID',
+    storageBucket: 'REPLACE_WITH_STORAGE_BUCKET',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyApQwvAIl7vIypxmhsQ_ZBYbJwWA-PGSzQ',
-    appId: '1:746751594801:ios:47fcb9a60be94ae8472010',
-    messagingSenderId: '746751594801',
-    projectId: 'campus-reddit',
-    storageBucket: 'campus-reddit.firebasestorage.app',
+    apiKey: 'REPLACE_WITH_IOS_API_KEY',
+    appId: 'REPLACE_WITH_IOS_APP_ID',
+    messagingSenderId: 'REPLACE_WITH_MESSAGING_SENDER_ID',
+    projectId: 'REPLACE_WITH_PROJECT_ID',
+    storageBucket: 'REPLACE_WITH_STORAGE_BUCKET',
     iosBundleId: 'com.example.campusConnect',
   );
 }

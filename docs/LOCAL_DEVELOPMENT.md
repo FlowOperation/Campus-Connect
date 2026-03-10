@@ -62,6 +62,12 @@ dart pub global activate flutterfire_cli
 flutterfire configure
 ```
 
+Note:
+
+- `android/app/google-services.example.json` is committed as a template only.
+- Copy it to `android/app/google-services.json` and replace values with your Firebase project settings, or download the real file from Firebase Console.
+- Keep real credential files out of git.
+
 ## Cloudinary (Image Uploads)
 
 Cloudinary setup is configured in `lib/services/image_upload_service.dart`.

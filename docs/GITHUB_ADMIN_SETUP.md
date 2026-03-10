@@ -30,6 +30,7 @@ Add these checks in the branch protection rule:
 - `PR Validation / Conventional Commits Check`
 - `PR Validation / Lint and Format Check`
 - `Dependency Audit / dependency-review`
+- `Secret Guard / gitleaks`
 
 Optional additional required check:
 

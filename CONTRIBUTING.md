@@ -129,6 +129,22 @@ flutter analyze --no-fatal-infos
 flutter test
 ```
 
+## Secret Hygiene (Required)
+
+- Never commit real credentials or API keys.
+- Keep Firebase local config files untracked:
+	- `android/app/google-services.json`
+	- `ios/Runner/GoogleService-Info.plist`
+- Use committed template files/examples only.
+
+Before pushing, run a quick leak check:
+
+```bash
+git grep -nE 'AIza[0-9A-Za-z_-]{20,}|-----BEGIN (RSA|EC|OPENSSH) PRIVATE KEY-----|xox[baprs]-'
+```
+
+CI also runs `Secret Guard` and will fail PRs that contain leaked secrets.
+
 If tests are not possible for a change, explain why in the PR.
 
 ## Reporting Bugs

@@ -1,0 +1,11 @@
+title = "Campus Connect gitleaks config"
+
+[allowlist]
+description = "Allow project placeholders and example config templates"
+paths = [
+  '''android/app/google-services.example.json''',
+]
+regexes = [
+  '''REPLACE_WITH_[A-Z0-9_]+''',
+  '''YOUR_[A-Z0-9_]+''',
+]

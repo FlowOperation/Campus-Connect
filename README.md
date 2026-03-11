@@ -44,15 +44,15 @@ You can keep placeholders in git and replace them as UI evolves.
 
 ## Architecture Overview
 
-Campus Connect follows a layered Flutter architecture:
+Campus Connect follows a feature-module Flutter architecture with shared foundations:
 
-1. Presentation: `lib/screens/`, `lib/widgets/`
-2. State: `lib/providers/` (Riverpod providers)
-3. Domain Models: `lib/models/`
-4. Data/Services: `lib/services/` (Firebase and upload services)
-5. App bootstrap/config: `lib/main.dart`, `lib/firebase_options.dart`, `lib/utils/`
+1. App shell and theme: `lib/app/`
+2. Feature modules: `lib/features/<feature>/{presentation,application,domain,infrastructure}`
+3. Shared UI primitives: `lib/shared/`
+4. Existing state/models/services: `lib/providers/`, `lib/models/`, `lib/services/`
+5. Bootstrap/config: `lib/main.dart`, `lib/firebase_options.dart`, `lib/utils/`
 
-This separation helps contributors change UI, state, and backend behavior independently with lower regression risk.
+This keeps UI and feature ownership clear while the remaining non-UI layers are incrementally migrated.
 
 ## Installation
 
@@ -108,14 +108,24 @@ Current source layout:
 
 ```text
 lib/
+  app/
+    app.dart
+    theme/
+  features/
+    auth/
+    posts/
+    profiles/
+    comments/
+    messaging/
+    moderation/
+  shared/
+    widgets/
   main.dart
   firebase_options.dart
   models/
   providers/
-  screens/
   services/
   utils/
-  widgets/
 test/
 docs/
   images/
@@ -128,10 +138,12 @@ Recommended long-term structure and conventions are documented in `docs/REPOSITO
 
 ## Roadmap
 
-Short and mid-term roadmap is tracked in:
+Short and mid-term product roadmap is tracked in:
 
 - `ROADMAP.md`
 - GitHub Issues with labels `enhancement`, `good first issue`, and `priority-high`
+
+Engineering architecture and standards documents are tracked in `engineering-foundation/`.
 
 Release planning and semantic versioning policy live in `docs/RELEASE_STRATEGY.md`.
 

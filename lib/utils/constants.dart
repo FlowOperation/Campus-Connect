@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 
 // App Colors
 class AppColors {
-  static const primary = Color(0xFF3B82F6);
-  static const accent = Color(0xFF6366F1);
-  static const background = Color(0xFFF8FAFC);
+  static const primary = Color(0xFFFF4500);
+  static const accent = Color(0xFF0079D3);
+  static const background = Color(0xFFF6F7F8);
   static const cardBackground = Colors.white;
-  static const textPrimary = Color(0xFF1E293B);
-  static const textSecondary = Color(0xFF64748B);
-  static const error = Color(0xFFEF4444);
-  static const success = Color(0xFF10B981);
+  static const surfaceMuted = Color(0xFFF0F2F5);
+  static const textPrimary = Color(0xFF1A1A1B);
+  static const textSecondary = Color(0xFF6E7072);
+  static const border = Color(0xFFE6E7E8);
+  static const error = Color(0xFFD93900);
+  static const success = Color(0xFF2E7D32);
 }
 
 // Post Categories
@@ -67,13 +69,13 @@ class PostCategory {
 class AppTextStyles {
   static const heading1 = TextStyle(
     fontSize: 28,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
   );
 
   static const heading2 = TextStyle(
     fontSize: 22,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
   );
 

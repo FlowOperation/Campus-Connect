@@ -259,15 +259,15 @@ Campus Connect is a modern Flutter application that enables students to share no
 - Consistent typography
 
 **Color System**
-- Primary: Blue (#3B82F6)
-- Accent: Indigo (#6366F1)
-- Background: Light Grey (#F8FAFC)
-- Success: Green (#10B981)
-- Error: Red (#EF4444)
+- Primary: Reddit Orange (#FF4500)
+- Accent: Link Blue (#0079D3)
+- Background: Light Grey (#F6F7F8)
+- Success: Green (#2E7D32)
+- Error: Red/Orange (#D93900)
 - Category-specific colors
 
 **Typography**
-- Google Fonts: Poppins
+- Google Fonts: IBM Plex Sans
 - Heading 1: 28px, bold
 - Heading 2: 22px, bold
 - Heading 3: 18px, semibold
@@ -328,13 +328,14 @@ cached_network_image: ^3.4.1   # Image caching
 ### Project Structure
 ```
 lib/
+├── app/                        # App shell and theming
+├── features/                   # Feature modules by domain
+├── shared/                     # Shared UI primitives
 ├── main.dart                   # App entry + Firebase init
-├── models/                     # Data models
-├── screens/                    # UI screens
-├── providers/                  # Riverpod providers
-├── services/                   # Business logic
-├── widgets/                    # Reusable components
-└── utils/                      # Constants & helpers
+├── models/                     # Existing data models
+├── providers/                  # Existing Riverpod providers
+├── services/                   # Existing business services
+└── utils/                      # Constants and helpers
 ```
 
 ---
@@ -345,7 +346,7 @@ lib/
 - Authenticated reads for posts
 - Users can only write their own data
 - Post authors can delete own posts
-- Anyone can update posts (for likes)
+- Non-owners can only update interaction fields on posts
 - Proper permission checks
 
 ### Authentication Security

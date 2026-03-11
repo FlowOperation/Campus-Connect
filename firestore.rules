@@ -2,50 +2,156 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
     // Helper function to check if user is authenticated
     function isSignedIn() {
       return request.auth != null;
     }
-    
+
     // Helper function to check if user owns the document
     function isOwner(userId) {
       return isSignedIn() && request.auth.uid == userId;
     }
-    
+
+    // Basic allow-list validation for new post documents.
+    function validPostCreate(data) {
+      return data.keys().hasAll([
+               'id',
+               'title',
+               'description',
+               'category',
+               'authorId',
+               'authorName',
+               'createdAt',
+             ]) &&
+             data.id is string &&
+             data.authorId is string &&
+             data.authorName is string &&
+             data.title is string &&
+             data.description is string &&
+             data.category is string &&
+             data.createdAt is timestamp &&
+             data.title.size() >= 5 &&
+             data.title.size() <= 100 &&
+             data.description.size() >= 10 &&
+             data.description.size() <= 1000;
+    }
+
+    // Allow non-owners to only update interactive counters/arrays.
+    function postInteractionOnlyUpdate() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+               'upvotedBy',
+               'downvotedBy',
+               'bookmarkedBy',
+               'likedBy',
+               'commentCount',
+             ]);
+    }
+
+    // Immutable identity fields must not change after creation.
+    function postImmutableFieldsUnchanged() {
+      return request.resource.data.id == resource.data.id &&
+             request.resource.data.authorId == resource.data.authorId &&
+             request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    // Restrict owner edits to known content fields plus interaction fields.
+    function ownerPostEditableFieldsOnly() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+               'title',
+               'description',
+               'category',
+               'imageUrl',
+               'upvotedBy',
+               'downvotedBy',
+               'bookmarkedBy',
+               'likedBy',
+               'commentCount',
+             ]);
+    }
+
+    // Minimal validation for comment creates.
+    function validCommentCreate(data) {
+      return data.keys().hasAll([
+               'id',
+               'postId',
+               'content',
+               'authorId',
+               'authorName',
+               'createdAt',
+             ]) &&
+             data.id is string &&
+             data.postId is string &&
+             data.content is string &&
+             data.authorId is string &&
+             data.authorName is string &&
+             data.createdAt is timestamp &&
+             data.content.size() > 0 &&
+             data.content.size() <= 1000;
+    }
+
+    // User profiles: owner can read and write, everyone can read public profile fields.
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId);
+      allow delete: if false;
+    }
+
     // Posts collection rules
     match /posts/{postId} {
-      // Anyone can read posts
+      // Authenticated users can read posts.
       allow read: if true;
-      
-      // Only authenticated users can create posts
-      allow create: if isSignedIn() 
-                    && request.resource.data.authorId == request.auth.uid;
-      
-      // Only post author can update their post (for likes, upvotes, etc.)
-      allow update: if isOwner(resource.data.authorId);
-      
+
+      // Signed-in user creates only their own post with valid payload.
+      allow create: if isSignedIn() &&
+                    request.resource.data.authorId == request.auth.uid &&
+                    request.resource.data.id == postId &&
+                    validPostCreate(request.resource.data);
+
+      // Owner can update content fields, non-owners can only perform interaction updates.
+      allow update: if isSignedIn() &&
+                    postImmutableFieldsUnchanged() &&
+                    (
+                      (isOwner(resource.data.authorId) && ownerPostEditableFieldsOnly()) ||
+                      (!isOwner(resource.data.authorId) && postInteractionOnlyUpdate())
+                    );
+
       // Only post author can delete their post
       allow delete: if isOwner(resource.data.authorId);
     }
-    
+
     // Comments collection rules
     match /comments/{commentId} {
       // Anyone can read comments
       allow read: if true;
-      
+
       // Only authenticated users can create comments
-      allow create: if isSignedIn() 
-                    && request.resource.data.authorId == request.auth.uid;
-      
+      allow create: if isSignedIn() &&
+                    request.resource.data.authorId == request.auth.uid &&
+                    request.resource.data.id == commentId &&
+                    validCommentCreate(request.resource.data);
+
       // Only comment author can delete their comment
       allow delete: if isOwner(resource.data.authorId);
-      
+
       // Comments cannot be updated (only create and delete)
       allow update: if false;
     }
+
+    // Deny direct client writes to moderation-oriented collections.
+    match /reports/{reportId} {
+      allow read: if false;
+      allow write: if false;
+    }
+
+    match /moderation_actions/{actionId} {
+      allow read: if false;
+      allow write: if false;
+    }
+
+    match /audit_logs/{auditId} {
+      allow read: if false;
+      allow write: if false;
+    }
   }
 }
-
-// Note: This app uses Imgur for image hosting (free, unlimited storage)
-// No Firebase Storage rules needed!

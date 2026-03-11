@@ -1,7 +1,7 @@
 # System Design
 
 ## Architecture Overview
-Campus Connect uses a client-heavy architecture with backend-enforced security and moderation controls.
+Campus Connect uses a client-heavy architecture with backend-enforced security and moderation controls to deliver a FAST-only Reddit-style experience made of feeds, communities, threads, inbox, and moderation surfaces.
 
 ## System Components
 - Mobile/Web Client (Flutter)
@@ -31,6 +31,19 @@ Campus Connect uses a client-heavy architecture with backend-enforced security a
 4. Trigger function enriches document (derived counters, moderation score, searchable terms).
 5. Feed queries read campus-scoped, status-filtered posts.
 
+## Data Flow (Community Browsing)
+1. User opens Home or a specific community page.
+2. Client loads feed summaries filtered by joined communities, campus scope, and selected ranking mode.
+3. Community metadata provides rules, pinned posts, moderator list, and flair options.
+4. User joins/leaves community and the membership projection updates future feed relevance.
+
+## Data Flow (Thread Engagement)
+1. User opens a post from any feed.
+2. Client loads full post content, media, score, save state, and thread metadata.
+3. Comment read model loads top-level comments plus reply branches.
+4. User votes, replies, saves, shares, or reports from the thread.
+5. Thread activity updates counters, ranking signals, and inbox notifications.
+
 ## Data Flow (Moderation)
 1. User reports post/comment/message.
 2. `reports` document created with immutable evidence snapshot.
@@ -41,10 +54,14 @@ Campus Connect uses a client-heavy architecture with backend-enforced security a
 ## Firestore Collections (Top-Level)
 - `users`
 - `campuses`
+- `communities`
+- `community_memberships`
 - `posts`
 - `comments`
 - `votes`
-- `bookmarks`
+- `saves`
+- `hidden_items`
+- `notifications`
 - `conversations`
 - `messages`
 - `reports`
@@ -68,6 +85,17 @@ Campus Connect uses a client-heavy architecture with backend-enforced security a
 - Precomputed feed score fields to avoid complex client sorting.
 - Counter fan-out documents to avoid hot single-document updates.
 - TTL/archival policies for low-value historical moderation artifacts.
+
+## UX-Critical Surfaces
+- Home feed
+- Popular/discovery feed
+- Community page
+- Post detail + comments thread
+- Create post flow
+- Inbox/notifications
+- Profile
+- Settings
+- Moderator queue and action screens
 
 ## Failure Handling
 - Client retry with idempotency keys for write operations.

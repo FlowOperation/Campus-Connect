@@ -1,417 +1,317 @@
-# 🗺️ Campus Connect - Features Roadmap
+# Campus Connect Product Roadmap
 
-## ✅ MVP (Completed)
+## Roadmap Intent
 
-### Authentication & User Management
-- [x] Email/Password authentication
-- [x] Google Sign-In integration
-- [x] User profile creation
-- [x] Sign out functionality
-- [x] Auth state management
+Campus Connect is being built as a FAST-NUCES adaptation of Reddit, not just a general posting app. That means the roadmap must eventually deliver the full product loop:
 
-### Core Feed Features
-- [x] View all posts in feed
-- [x] Create new posts (title, description, category)
-- [x] Post categories (Notes, Jobs, Events, Lost & Found, Announcements)
-- [x] Category-based filtering
-- [x] Search posts by title/description
-- [x] Like posts
-- [x] Bookmark posts
-- [x] View post details
-- [x] Delete own posts
+1. Feed-first discovery
+2. Community-based segmentation
+3. Comment-centric depth
+4. Lightweight voting and saving
+5. Strong identity and moderation
+6. Return loops through inbox, profile, and notifications
 
-### User Profile
-- [x] View user profile
-- [x] Display user's posts
-- [x] Display bookmarked posts
-- [x] User avatar (from Google or initials)
-
-### UI/UX
-- [x] Material 3 design
-- [x] Responsive layouts
-- [x] Custom color scheme per category
-- [x] Category icons
-- [x] Loading states
-- [x] Error handling
-- [x] Empty states
+Every major feature is intended to ship, but in phases.
 
 ---
 
-## 🎯 Phase 2: Enhanced Core Features
+## Phase 0: Current Shipped Foundation
 
-### Post Enhancements
-- [ ] Image upload for posts
-  - Single image per post
-  - Image compression
-  - Firebase Storage integration
-  - Image gallery view
+### Auth and FAST identity
+- [x] Email/password sign up and sign in
+- [x] Google sign in
+- [x] FAST-domain validation for Google sign in
+- [x] Auth gate and session persistence
+- [x] Sign out
 
-- [ ] Rich text editor
-  - Bold, italic, underline
-  - Bullet points
-  - Links
+### Core feed and post model
+- [x] Home feed
+- [x] Category segmentation (current lightweight substitute for communities)
+- [x] Search by title/description
+- [x] Sort by popular, recent, and oldest
+- [x] Post cards with score and comment count
+- [x] Create text post
+- [x] Create single-image post (config dependent)
+- [x] View post detail
+- [x] Delete own post
 
+### Engagement
+- [x] Upvote post
+- [x] Downvote post
+- [x] Save/bookmark post
+
+### Comments foundation
+- [x] View comments
+- [x] Add comment
+- [x] Delete own comment
+
+### Profile foundation
+- [x] View profile
+- [x] View authored posts
+- [x] View saved posts
+
+### UI foundation
+- [x] Shared app shell and theme
+- [x] Responsive layout base
+- [x] Loading, error, and empty states
+
+---
+
+## Phase 1: Reddit Core UX Parity
+
+Goal: upgrade the current MVP into a cleaner Reddit-like browse-and-engage experience.
+
+### Feed actions and ranking
+- [ ] Share post
+- [ ] Hide post
+- [ ] Report post
+- [ ] Follow post / thread notifications
+- [ ] Hot / rising / top ranking models
+- [ ] Better score decay and trending heuristics
+- [ ] Feed pagination and infinite scrolling
+
+### Post enhancements
 - [ ] Post editing
-  - Edit title and description
-  - Show "edited" badge
-  - Edit history (optional)
+- [ ] Edited badge
+- [ ] Post link sharing
+- [ ] Copy post content/link
+- [ ] Media viewer for images
+- [ ] Better upload reliability and retry states
 
-- [ ] Post sharing
-  - Share post link
-  - Share to other apps
-  - Copy post content
+### Comment depth v1
+- [ ] Comment sort (`Best`, `Top`, `New`)
+- [ ] Comment upvote/downvote
+- [ ] Comment share
+- [ ] Comment report
+- [ ] Inline reply composer
+- [ ] Basic nested replies
 
-### Comments System
-- [ ] Add comments to posts
-- [ ] View all comments
-- [ ] Delete own comments
-- [ ] Like comments
-- [ ] Comment notifications
-- [ ] Nested replies (optional)
-
-### Enhanced Search & Discovery
-- [ ] Advanced filters
-  - Date range
-  - Author
-  - Most liked
-  - Most recent
-
-- [ ] Trending posts
-  - Based on likes/comments
-  - Time-based trending
-
-- [ ] Tags system
-  - Add tags to posts
-  - Search by tags
-  - Popular tags
+### Search improvements
+- [ ] Better search UX with recent queries
+- [ ] Result highlighting
+- [ ] Filter by author/date/sort
 
 ---
 
-## 🌟 Phase 3: Social Features
+## Phase 2: Community Layer (FAST Subreddit Equivalent)
 
-### User Profiles
-- [ ] Profile photos
-  - Upload custom avatar
-  - Crop and resize
+Goal: introduce true community pages so the app behaves like a university Reddit, not just a category feed.
 
-- [ ] Profile customization
-  - Bio/About section
-  - Department/Year
-  - Interests
-  - Social links
+### Community model
+- [ ] Communities for campuses, departments, batches, clubs, courses, and official channels
+- [ ] Community creation and moderation permissions
+- [ ] Join / leave community
+- [ ] Joined communities list
+- [ ] Community recommendations
 
-- [ ] User statistics
-  - Total posts
-  - Total likes received
-  - Total bookmarks
-  - Member since
+### Community surfaces
+- [ ] Community page with header, description, member count, and about section
+- [ ] Community rules screen
+- [ ] Community moderators list
+- [ ] Search within community
+- [ ] Community feed sorting (`Hot`, `New`, `Top`, `Rising`)
+- [ ] Community flair filtering
 
-- [ ] Follow system
-  - Follow other users
-  - View followed users' posts
-  - Followers list
-  - Following feed
+### Community publishing
+- [ ] Choose community while posting
+- [ ] Pinned posts
+- [ ] Official announcement communities
+- [ ] Moderator-distinguished posts
 
-### Notifications
+---
+
+## Phase 3: Thread Depth and Composer Expansion
+
+Goal: make the comments thread and posting workflow rich enough to support real community discussion.
+
+### Thread depth
+- [ ] Deep nested replies
+- [ ] Collapse/expand comment trees
+- [ ] View more replies
+- [ ] Save comment
+- [ ] Block user from thread
+- [ ] Comment moderation states
+- [ ] Thread follow/subscription
+
+### Composer evolution
+- [ ] Rich text editor
+- [ ] Link posts
+- [ ] Video posts
+- [ ] Poll posts
+- [ ] Crosspost flow
+- [ ] Flair picker
+- [ ] Spoiler / sensitive-content flags
+- [ ] Draft saving
+- [ ] Discard confirmation
+
+### Media and previews
+- [ ] Better image gallery behavior
+- [ ] Fullscreen media viewer
+- [ ] Video playback controls
+- [ ] Link preview cards
+
+---
+
+## Phase 4: Identity, Profile, Inbox, and Settings
+
+Goal: strengthen return loops and self-management.
+
+### Profile evolution
+- [ ] Overview tab
+- [ ] Comments tab
+- [ ] Hidden posts tab
+- [ ] Upvoted/downvoted private history
+- [ ] Profile editing
+- [ ] Custom avatar upload and crop
+- [ ] Bio, department, batch/year, interests
+- [ ] Stats and karma-like reputation
+- [ ] Achievements / campus badges
+
+### Inbox and notifications
+- [ ] Activity inbox
+- [ ] Replies and mentions
+- [ ] Vote and save activity notifications
+- [ ] System and moderation notices
+- [ ] Mark as read
+- [ ] Notification filters
+- [ ] Notification settings
 - [ ] Push notifications (FCM)
-  - New comment on your post
-  - Someone liked your post
-  - Someone followed you
-  - New post in followed categories
 
-- [ ] In-app notifications
-  - Notification bell icon
-  - Notification center
-  - Mark as read
-  - Notification settings
+### Settings
+- [ ] Account settings
+- [ ] Profile settings
+- [ ] Privacy settings
+- [ ] Notification settings
+- [ ] Content preferences
+- [ ] Dark mode
+- [ ] Font size and accessibility settings
+- [ ] Muted/blocked users and communities
 
-### Direct Messaging (Optional)
-- [ ] One-on-one chat
-- [ ] Real-time messaging
+---
+
+## Phase 5: Messaging and Private Coordination
+
+Goal: add private follow-up communication without displacing the public feed-and-thread model.
+
+### Direct messaging
+- [ ] One-to-one chat
+- [ ] Conversation list
+- [ ] Real-time delivery
 - [ ] Message notifications
 - [ ] Chat history
+- [ ] Attachments/media where appropriate
+
+### Safety controls
+- [ ] Block user
+- [ ] Mute conversation
+- [ ] Report message
+- [ ] Leave/hide chat
 
 ---
 
-## 🎨 Phase 4: UI/UX Enhancements
+## Phase 6: Moderation, Governance, and Safety
 
-### Theme & Appearance
-- [ ] Dark mode
-  - System-based toggle
-  - Manual toggle
-  - Persistent preference
+Goal: deliver subreddit-style moderation adapted for FAST campus safety and governance.
 
-- [ ] Theme customization
-  - Accent color options
-  - Font size options
+### Student-facing reporting
+- [ ] Report post
+- [ ] Report comment
+- [ ] Report message
+- [ ] Report user/profile
 
-### Accessibility
-- [ ] Screen reader support
-- [ ] High contrast mode
-- [ ] Font scaling
-- [ ] Touch target sizing
+### Moderator tools
+- [ ] Mod queue
+- [ ] Approve / remove content
+- [ ] Mark as spam
+- [ ] Lock comments
+- [ ] Sticky / pin post
+- [ ] Distinguish moderator posts/comments
+- [ ] Message user / warning flows
+- [ ] Ban / mute / suspend user
+- [ ] Community rule management
 
-### Animations
-- [ ] Page transitions
-- [ ] Card animations
-- [ ] Pull to refresh
-- [ ] Shimmer loading
-- [ ] Confetti on post creation
-
----
-
-## 📱 Phase 5: Platform Features
-
-### Event Management
-- [ ] Calendar view for events
-- [ ] Event RSVP
-- [ ] Event reminders
-- [ ] Add to device calendar
-- [ ] Event attendance tracking
-
-### Job Board Enhancements
-- [ ] Job application tracking
-- [ ] Save drafts
-- [ ] Application deadline alerts
-- [ ] External job links
-
-### Notes Sharing
-- [ ] File attachments (PDF, DOCX)
-  - Upload documents
-  - Preview in-app
-  - Download files
-
-- [ ] Study groups
-  - Create study groups
-  - Group discussions
-  - Shared notes
-
-### Lost & Found
-- [ ] Mark as "Found"
-- [ ] Contact information
-- [ ] Location tagging
-- [ ] Image requirements
-
----
-
-## 🔧 Phase 6: Admin & Moderation
-
-### Admin Panel
+### Admin tools
 - [ ] Admin dashboard
-- [ ] User management
-  - View all users
-  - Ban users
-  - Delete accounts
-
-- [ ] Content moderation
-  - Review flagged posts
-  - Delete inappropriate content
-  - Warn users
-
-- [ ] Analytics
-  - Total users
-  - Posts per category
-  - Active users
-  - Engagement metrics
-
-### Reporting System
-- [ ] Report posts
-  - Spam
-  - Inappropriate content
-  - Harassment
-
-- [ ] Report users
-- [ ] Report comments
-
-### Content Policies
-- [ ] Community guidelines
-- [ ] Terms of service
-- [ ] Privacy policy
+- [ ] Role management
+- [ ] Campus-wide announcements
+- [ ] Audit logs and appeals
+- [ ] Community governance tooling
+- [ ] Moderation analytics and SLA tracking
 
 ---
 
-## 🚀 Phase 7: Advanced Features
+## Phase 7: FAST-Specific Utility Experiences
 
-### AI/ML Features
-- [ ] Smart recommendations
-  - Suggest posts based on interests
-  - Suggest users to follow
+Goal: make Campus Connect more useful than a generic Reddit clone by shipping category-specific university workflows.
 
-- [ ] Content moderation AI
-  - Auto-detect inappropriate content
-  - Spam detection
+### Notes and academics
+- [ ] File attachments (PDF, DOCX, slides)
+- [ ] In-app preview
+- [ ] Download/share notes
+- [ ] Study groups and course communities
 
-- [ ] Smart search
-  - Semantic search
-  - Auto-complete
+### Jobs and internships
+- [ ] External job links
+- [ ] Deadline reminders
+- [ ] Save job posts
+- [ ] Application tracking notes
 
-### Gamification
-- [ ] Badges & achievements
-  - First post
-  - 10 posts milestone
-  - 100 likes received
-  - Helpful contributor
+### Events
+- [ ] Calendar view
+- [ ] RSVP
+- [ ] Reminder notifications
+- [ ] Add to device calendar
 
+### Lost and found
+- [ ] Mark item as found
+- [ ] Contact flow
+- [ ] Location tagging
+- [ ] Proof / image requirements
+
+---
+
+## Phase 8: Intelligence, Growth, and Platform Expansion
+
+Goal: optimize discovery, retention, and reach once core behavior is stable.
+
+### Discovery intelligence
+- [ ] Recommendations
+- [ ] Personalized community suggestions
+- [ ] Trending topics
+- [ ] Semantic search
+- [ ] Search auto-complete
+
+### Reputation and gamification
+- [ ] Reputation tiers
+- [ ] Helpful contributor indicators
+- [ ] Milestone badges
 - [ ] Leaderboards
-  - Most active users
-  - Most helpful contributors
 
-- [ ] Reputation system
-  - Upvote/downvote
-  - Trusted user badge
+### Analytics and operations
+- [ ] Firebase Analytics
+- [ ] Crashlytics
+- [ ] Feature usage dashboards
+- [ ] Moderator insights
+- [ ] Personal analytics dashboard
 
-### Integration Features
-- [ ] Calendar integration
-  - Google Calendar
-  - Apple Calendar
-
-- [ ] Email notifications
-  - Daily digest
-  - Weekly summary
-
-- [ ] Export data
-  - Export own posts
-  - GDPR compliance
-
----
-
-## 📊 Phase 8: Analytics & Insights
-
-### User Analytics
-- [ ] Personal stats dashboard
-  - Post views
-  - Engagement rate
-  - Popular posts
-
-### App Analytics
-- [ ] Firebase Analytics integration
-- [ ] User behavior tracking
-- [ ] Feature usage metrics
-- [ ] Crash reporting (Firebase Crashlytics)
-
----
-
-## 🌐 Phase 9: Multi-platform
-
-### Web App
-- [ ] Responsive web version
+### Platform expansion
+- [ ] Responsive web app
 - [ ] PWA support
-- [ ] Web-specific optimizations
+- [ ] Desktop support (macOS, Windows, Linux)
 
-### Desktop Apps
-- [ ] macOS app
-- [ ] Windows app
-- [ ] Linux app
-
----
-
-## 🔐 Phase 10: Security & Performance
-
-### Security
-- [ ] Two-factor authentication
+### Security and performance hardening
 - [ ] Email verification requirement
-- [ ] Rate limiting
-- [ ] IP blocking
-- [ ] Data encryption
-
-### Performance
-- [ ] Image optimization
-- [ ] Lazy loading
-- [ ] Caching strategy
-- [ ] Offline support
-  - Cached posts
-  - Offline actions queue
-
+- [ ] Two-factor authentication
+- [ ] Rate limiting and abuse throttling
+- [ ] Better caching strategy
+- [ ] Offline read/write queueing
 - [ ] Performance monitoring
-  - Firebase Performance
-  - Load time tracking
 
 ---
 
-## 📝 Implementation Priority
+## Delivery Principles
 
-### High Priority (Next Sprint)
-1. Image upload for posts
-2. Comments system
-3. Dark mode
-4. Push notifications
-5. Enhanced user profiles
-
-### Medium Priority
-1. Advanced search filters
-2. File attachments
-3. Event calendar view
-4. Admin panel basics
-5. Trending posts
-
-### Low Priority
-1. Direct messaging
-2. AI recommendations
-3. Gamification
-4. Multi-platform apps
-5. Advanced analytics
-
----
-
-## 🎯 Success Metrics
-
-### MVP Success
-- [x] 100% feature completion
-- [x] No critical bugs
-- [x] Authentication working
-- [x] CRUD operations working
-
-### Phase 2 Success
-- [ ] 50+ test users
-- [ ] 200+ posts created
-- [ ] 500+ likes/bookmarks
-- [ ] 100+ comments
-
-### Long-term Success
-- [ ] 1000+ registered users
-- [ ] 5000+ posts
-- [ ] 50+ daily active users
-- [ ] <1% crash rate
-- [ ] 4.5+ app rating
-
----
-
-## 📅 Timeline Estimate
-
-| Phase | Features | Estimated Time |
-|-------|----------|----------------|
-| MVP | Core features | ✅ Completed |
-| Phase 2 | Enhanced core | 1-2 weeks |
-| Phase 3 | Social features | 2-3 weeks |
-| Phase 4 | UI/UX enhancements | 1 week |
-| Phase 5 | Platform features | 2-3 weeks |
-| Phase 6 | Admin & moderation | 1-2 weeks |
-| Phase 7 | Advanced features | 3-4 weeks |
-| Phase 8 | Analytics | 1 week |
-| Phase 9 | Multi-platform | 2-3 weeks |
-| Phase 10 | Security & perf | Ongoing |
-
-**Total MVP → Full Featured App: 3-4 months**
-
----
-
-## 💡 Notes
-
-- Focus on user feedback after each phase
-- Prioritize features that drive engagement
-- Maintain code quality and documentation
-- Regular testing and bug fixes
-- Keep Firebase costs in check
-- Monitor app performance continuously
-
----
-
-## 🚀 Let's Build Amazing Features Together!
-
-This roadmap is flexible and will evolve based on:
-- User feedback
-- Technical constraints
-- Time availability
-- New ideas and innovations
-
-**Current Status:** ✅ MVP Complete - Ready for Phase 2!
+- Ship Reddit-like core loops before peripheral features.
+- Prioritize comments, communities, inbox, and moderation over novelty.
+- FAST-specific utilities should build on top of the community and thread model, not bypass it.
+- Every phase must leave the app usable, testable, and safer than before.

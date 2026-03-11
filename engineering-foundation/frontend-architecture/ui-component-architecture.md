@@ -11,9 +11,9 @@
 - Primitives
   - `AppText`, `AppIcon`, `AppButton`, `AppInput`, `AppCard`.
 - Composites
-  - `PostListItem`, `CommentComposer`, `ReportBottomSheet`, `ConversationTile`.
+  - `PostListItem`, `PostActionBar`, `CommunityHeader`, `CommentComposer`, `CommentBranch`, `NotificationTile`, `ReportBottomSheet`, `ConversationTile`.
 - Layouts
-  - `AppScaffold`, `ContentSection`, `EmptyState`, `ErrorState`.
+  - `AppScaffold`, `FeedShell`, `CommunityShell`, `ContentSection`, `EmptyState`, `ErrorState`.
 
 ## Ownership Model
 - Shared primitives live in `lib/shared/components`.
@@ -25,6 +25,7 @@
 - Typography through semantic roles (`titleLarge`, `bodyMedium`, etc.).
 - Touch targets minimum 44x44.
 - Disabled/loading/error states required for interactive components.
+- Repeated Reddit-style actions (`vote`, `save`, `share`, `hide`, `reply`, `join`) should render through shared primitives, not bespoke per-screen code.
 
 ## Review Checklist
 - Does the component expose only necessary inputs?

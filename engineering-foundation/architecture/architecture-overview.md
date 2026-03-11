@@ -1,15 +1,18 @@
 # Campus Connect Architecture Overview
 
 ## Purpose
-This document defines the target architecture for evolving Campus Connect from MVP into a production-grade, modular campus platform. The design optimizes for maintainability, feature velocity, moderation safety, and secure growth across campuses.
+This document defines the target architecture for evolving Campus Connect from a posting MVP into a production-grade FAST-only Reddit-style platform. The design optimizes for feed-first discovery, comment-centric depth, community membership, moderation safety, and long-term product velocity.
 
 ## System Scope
-Campus Connect is a private discussion network for FAST-NUCES students supporting:
-- Authenticated identity and profile verification
-- Discussion posts, comments, voting, bookmarking, and search
+Campus Connect is a private FAST-NUCES discussion network supporting:
+- Authenticated campus identity and profile verification
+- Home, Popular, and community-specific feed browsing
+- Comment-centric post threads with lightweight voting and saving
+- Community membership, rules, pinned posts, and moderator governance
+- Search across posts, communities, comments, and people
 - Direct messaging with safety controls
-- Moderation workflows and auditability
-- Multi-campus segmentation and policy enforcement
+- Moderation workflows, reporting, and auditability
+- Multi-campus segmentation and FAST-specific utility content (notes, jobs, events, lost & found)
 
 ## Architectural Style
 - Client: Flutter app using feature-based modular monolith architecture
@@ -33,10 +36,12 @@ Campus Connect is a private discussion network for FAST-NUCES students supportin
 
 ## Bounded Contexts
 - Identity: account lifecycle, role claims, campus assignment, verification status
-- Discussions: posts, comments, voting, bookmarks, tags, search metadata
+- Discovery: home/popular/community feeds, ranking, search metadata, recommendations
+- Communities: community definitions, memberships, rules, flairs, moderators, pinned content
+- Threads: posts, comments, replies, votes, saves, hidden items, thread sorting
 - Moderation: reports, enforcement actions, queues, policy rules, audit logs
 - Messaging: conversations, message delivery, safety checks, reporting hooks
-- Community Ops: announcements, pinned content, moderator management
+- FAST Utilities: notes, jobs, events, lost & found extensions built on top of post/community primitives
 
 ## Deployment Topology
 - Flutter clients for Android/iOS/web
@@ -76,3 +81,11 @@ Decision: Build reports, queues, policy engine hooks, and audit logs as core com
 Alternatives considered: manual moderation through direct document edits.
 Tradeoffs: additional data model and operations complexity.
 Long-term implications: safer community growth and governance readiness.
+
+### Decision: Communities as product backbone
+Context: Reddit-like retention depends on belonging to repeat-visit topic spaces.
+Problem: Flat category chips are not enough to support identity, rules, or moderator ownership.
+Decision: Introduce explicit community entities for campuses, departments, clubs, courses, and official spaces.
+Alternatives considered: keep categories only; rely on search and tags alone.
+Tradeoffs: more routing, moderation, and data model complexity.
+Long-term implications: stronger retention, clearer governance, and higher-quality discovery.

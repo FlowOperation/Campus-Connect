@@ -16,15 +16,26 @@
 
 ## Domain Components
 - `PostCard`
+- `PostActionBar`
+- `CommunityHeader`
+- `CommunityJoinButton`
 - `CommentThreadItem`
+- `CommentComposer`
+- `CommentSortSheet`
 - `VoteControl`
 - `BookmarkControl`
+- `ShareAction`
+- `HideAction`
+- `NotificationTile`
+- `InboxFilterBar`
 - `ConversationTile`
 - `ModerationActionSheet`
 - `ReportReasonPicker`
 
 ## Layout Components
 - `AppScaffold`
+- `FeedShell`
+- `CommunityScaffold`
 - `SectionHeader`
 - `PagedListView`
 - `StickyFilterBar`

@@ -5,27 +5,45 @@
 - Use denormalized summaries for read-heavy screens.
 - Include `schemaVersion` for all mutable entities.
 - Store `campusId` on all campus-bound entities.
+- Model communities explicitly rather than relying only on post categories.
+- Preserve enough metadata for feed cards, threads, and inbox projections.
 
 ## Core Collections
 ### users
 Fields:
-- `displayName`, `email`, `campusId`, `roles`, `status`, `createdAt`, `lastSeenAt`
+- `displayName`, `email`, `campusId`, `department`, `batchYear`, `roles`, `status`, `karma`, `createdAt`, `lastSeenAt`
+
+### communities
+Fields:
+- `name`, `slug`, `displayName`, `description`, `campusId`, `communityType`, `rules`, `moderatorIds`, `memberCount`, `createdAt`, `status`
+
+### community_memberships
+Fields:
+- `communityId`, `userId`, `role`, `joinedAt`, `notificationLevel`
 
 ### posts
 Fields:
-- `authorId`, `campusId`, `category`, `title`, `body`, `media`, `status`, `score`, `commentCount`, `createdAt`, `updatedAt`, `schemaVersion`
+- `authorId`, `communityId`, `campusId`, `category`, `postType`, `title`, `body`, `linkUrl`, `media`, `flairId`, `status`, `score`, `commentCount`, `createdAt`, `updatedAt`, `isPinned`, `isSpoiler`, `schemaVersion`
 
 ### comments
 Fields:
-- `postId`, `authorId`, `campusId`, `parentCommentId`, `body`, `status`, `score`, `createdAt`
+- `postId`, `authorId`, `campusId`, `parentCommentId`, `depth`, `body`, `status`, `score`, `replyCount`, `createdAt`
 
 ### votes
 Fields:
 - `targetType`, `targetId`, `userId`, `value`, `createdAt`
 
-### bookmarks
+### saves
 Fields:
-- `userId`, `postId`, `createdAt`
+- `userId`, `targetType`, `targetId`, `createdAt`
+
+### hidden_items
+Fields:
+- `userId`, `targetType`, `targetId`, `createdAt`
+
+### notifications
+Fields:
+- `userId`, `type`, `sourceType`, `sourceId`, `actorId`, `readAt`, `createdAt`, `metadata`
 
 ### conversations
 Fields:
@@ -49,8 +67,11 @@ Fields:
 
 ## Index Strategy
 Required composite indexes:
-- `posts`: (`campusId`, `status`, `hotScore desc`, `createdAt desc`)
-- `comments`: (`postId`, `status`, `createdAt asc`)
+- `posts`: (`communityId`, `status`, `hotScore desc`, `createdAt desc`)
+- `posts`: (`campusId`, `status`, `createdAt desc`)
+- `comments`: (`postId`, `status`, `score desc`, `createdAt asc`)
+- `notifications`: (`userId`, `createdAt desc`)
+- `community_memberships`: (`userId`, `joinedAt desc`)
 - `reports`: (`status`, `priority desc`, `createdAt asc`)
 - `conversations`: (`participantIds array-contains`, `lastMessageAt desc`)
 

@@ -1,105 +1,101 @@
 # User Stories
 
-## Story 1: Student Authentication
+## Story 1: FAST Identity Gate
 As a FAST student
-I want to sign in using my institutional email
-So that only verified students can access the platform
+I want to sign in with a FAST-approved account
+So that the platform remains trusted and campus-specific
 
 Acceptance criteria:
-- Sign-in allows only approved FAST domains.
-- Unverified or invalid domain users are denied with clear reason.
-- Verified users are assigned campus and baseline role claims.
+- Allowed FAST domains are enforced.
+- Unauthorized domains are rejected with a clear explanation.
+- User profile is created with baseline campus identity.
 
-Edge cases:
-- User has valid domain but missing campus mapping.
-- User account exists but is suspended.
-
-Technical notes:
-- Enforce domain checks in auth onboarding service.
-- Persist verification and campus in `users` document.
-
-## Story 2: Create Campus-Scoped Post
+## Story 2: Browse Home Feed
 As a student
-I want to publish a categorized post
-So that peers in my campus can discover relevant information
+I want to open a fast-scanning home feed
+So that I can quickly discover relevant campus content
 
 Acceptance criteria:
-- Post requires title, body, and category.
-- Post appears in campus feed after successful write.
-- Invalid payloads are rejected with field-level feedback.
+- Feed cards show title, community/category, score, comment count, author, and age.
+- I can vote, save, and open a thread from the card.
+- Feed supports ranking and filtering.
 
-Edge cases:
-- Duplicate rapid submissions.
-- Post flagged as high-risk by moderation automation.
-
-Technical notes:
-- Use idempotency token for submission retries.
-- Write includes `campusId` and `schemaVersion`.
-
-## Story 3: Vote and Bookmark
+## Story 3: Join a Community
 As a student
-I want to vote and bookmark content
-So that I can signal quality and save useful posts
+I want to join department, course, club, and campus communities
+So that my feed reflects the parts of FAST that matter to me
 
 Acceptance criteria:
-- Vote state toggles correctly and updates score.
-- Bookmark state persists per user.
-- Unauthorized users cannot modify vote/bookmark state.
+- I can join/leave communities.
+- Joined communities influence Home feed relevance.
+- Community pages expose rules, moderators, and pinned posts.
 
-Edge cases:
-- Offline interactions replay after reconnect.
-- Simultaneous vote changes from multiple clients.
-
-Technical notes:
-- Use sharded counters and conflict-safe updates.
-
-## Story 4: Report Harmful Content
+## Story 4: Go Deep in a Thread
 As a student
-I want to report abusive or unsafe content
-So that moderators can take action quickly
+I want to open a post and explore comments and replies
+So that I can get the real context, opinions, and answers behind the post
 
 Acceptance criteria:
-- Report form requires reason code.
-- Report enters moderation queue with priority metadata.
-- Reporter receives confirmation without exposing moderator internals.
+- Thread view supports comment reading and posting.
+- Comments can be voted and sorted.
+- Nested replies can be expanded and collapsed.
 
-Edge cases:
-- Reported content deleted before review.
-- Malicious repetitive reporting by one user.
+## Story 5: Create the Right Kind of Post
+As a student
+I want to create text, image, link, and other structured post types
+So that I can contribute in the format best suited to the community
 
-Technical notes:
-- Persist evidence snapshot and reporter trust factors.
+Acceptance criteria:
+- I choose a target community.
+- Composer enforces community rules and required fields.
+- Drafts and edit states are supported for longer-form posting.
 
-## Story 5: Moderator Enforcement
+## Story 6: Return Through Activity
+As a student
+I want an inbox for replies, mentions, and moderation updates
+So that I know when conversations I care about become active again
+
+Acceptance criteria:
+- Inbox groups reply and activity notifications.
+- I can mark items as read and open the linked thread.
+- Notification settings control noisy categories.
+
+## Story 7: Inspect Profile and Reputation
+As a student
+I want to view my own and others’ profile history
+So that I can assess credibility, revisit saved content, and manage my activity
+
+Acceptance criteria:
+- Profiles show posts and comments.
+- Private tabs support saved and hidden content.
+- Reputation or contribution indicators are visible at appropriate surfaces.
+
+## Story 8: Report Unsafe Behavior
+As a student
+I want to report abusive or unsafe posts, comments, messages, or users
+So that moderators can respond quickly
+
+Acceptance criteria:
+- Reporting supports multiple source types.
+- Reports create evidence-backed moderation cases.
+- Reporter feedback confirms submission without exposing private moderation data.
+
+## Story 9: Moderate a Community
 As a moderator
-I want to review reports and enforce policies
-So that community rules are applied consistently
+I want to review reports and take action on content and users
+So that community rules are enforced consistently
 
 Acceptance criteria:
-- Moderator can dismiss, remove content, warn, or suspend.
-- Every action requires policy code and rationale.
-- Actions are fully logged for audits and appeals.
+- Moderators can approve, remove, lock, pin, warn, mute, and suspend.
+- Actions are logged with policy code and rationale.
+- Appeals and audit trails are preserved.
 
-Edge cases:
-- Conflicting actions by two moderators.
-- Appeal submitted after enforcement expiration.
-
-Technical notes:
-- Use optimistic lock/version checks on report state.
-
-## Story 6: Direct Messaging Safety
+## Story 10: Coordinate Privately
 As a student
-I want private messaging with safety controls
-So that I can collaborate without harassment risks
+I want safe direct messaging for follow-up conversation
+So that I can continue useful interactions outside the public thread
 
 Acceptance criteria:
-- Only conversation participants can read/send messages.
-- Users can report and block abusive senders.
-- Suspended users cannot send messages.
-
-Edge cases:
-- Message delivery retries create duplicates.
-- One participant blocks the other mid-conversation.
-
-Technical notes:
-- Require idempotency key for sends and participant rule checks.
+- Only participants can read/send messages.
+- Blocking, muting, and reporting are built in.
+- Safety enforcement applies to both public and private spaces.

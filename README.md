@@ -11,15 +11,8 @@ Mission: build a high-quality, student-owned digital campus space for discussion
 [![CI](https://github.com/ammaarrahmed/Campus-Connect/actions/workflows/flutter_ci.yml/badge.svg)](https://github.com/ammaarrahmed/Campus-Connect/actions/workflows/flutter_ci.yml)
 [![PR Validation](https://github.com/ammaarrahmed/Campus-Connect/actions/workflows/pr_validation.yml/badge.svg)](https://github.com/ammaarrahmed/Campus-Connect/actions/workflows/pr_validation.yml)
 
-## Screenshots
-
-Add screenshots before public launch:
-
-- Feed: `docs/images/feed.png`
-- Post detail: `docs/images/post-detail.png`
-- Create post: `docs/images/create-post.png`
-- Profile: `docs/images/profile.png`
-
+## Check it out on Youtube
+https://youtube.com/shorts/McVDLVQ--DU?feature=share
 You can keep placeholders in git and replace them as UI evolves.
 
 ## Key Features

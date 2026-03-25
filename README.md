@@ -13,7 +13,6 @@ Mission: build a high-quality, student-owned digital campus space for discussion
 
 ## Check it out on Youtube
 https://youtube.com/shorts/McVDLVQ--DU?feature=share
-You can keep placeholders in git and replace them as UI evolves.
 
 ## Key Features
 

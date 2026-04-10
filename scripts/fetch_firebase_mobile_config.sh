@@ -23,17 +23,29 @@ project_id="$1"
 android_app_id="$2"
 ios_app_id="$3"
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+android_out="$repo_root/android/app/google-services.json"
+ios_out="$repo_root/ios/Runner/GoogleService-Info.plist"
+android_tmp="$(mktemp "$repo_root/android/app/google-services.json.tmp.XXXXXX")"
+ios_tmp="$(mktemp "$repo_root/ios/Runner/GoogleService-Info.plist.tmp.XXXXXX")"
 
-rm -f "$repo_root/android/app/google-services.json"
-rm -f "$repo_root/ios/Runner/GoogleService-Info.plist"
+cleanup() {
+  rm -f "$android_tmp" "$ios_tmp"
+}
+
+trap cleanup EXIT
 
 firebase apps:sdkconfig ANDROID "$android_app_id" \
   --project "$project_id" \
-  --out "$repo_root/android/app/google-services.json"
+  --out "$android_tmp"
 
 firebase apps:sdkconfig IOS "$ios_app_id" \
   --project "$project_id" \
-  --out "$repo_root/ios/Runner/GoogleService-Info.plist"
+  --out "$ios_tmp"
+
+mv "$android_tmp" "$android_out"
+mv "$ios_tmp" "$ios_out"
+
+trap - EXIT
 
 echo "Wrote local Firebase mobile config files:" >&2
 echo "  - android/app/google-services.json" >&2

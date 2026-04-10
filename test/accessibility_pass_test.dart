@@ -24,32 +24,20 @@ void main() {
     );
   }
 
-  Widget buildScopedTestApp(
-    Widget child, {
-    required List<Object> overrides,
-    double textScale = 1.0,
-  }) {
-    return ProviderScope(
-      overrides: overrides.cast(),
-      child: buildTestApp(child, textScale: textScale),
-    );
-  }
-
   testWidgets('home screen keeps key controls usable at large text sizes', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
     try {
       await tester.pumpWidget(
-        buildScopedTestApp(
-          const HomeScreen(),
-          textScale: 1.8,
+        ProviderScope(
           overrides: [
             authStateProvider.overrideWith(
               (ref) => Stream<firebase_auth.User?>.value(null),
             ),
             postsProvider.overrideWith((ref) => Stream.value(<Post>[])),
           ],
+          child: buildTestApp(const HomeScreen(), textScale: 1.8),
         ),
       );
       await tester.pump();

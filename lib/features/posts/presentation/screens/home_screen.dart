@@ -29,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final filteredPosts = ref.watch(filteredPostsProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
+    final currentSortOption = ref.watch(sortOptionProvider);
     final currentUser = ref.watch(authStateProvider).value;
     final allChipForeground = AppColors.accessibleForeground(AppColors.primary);
 
@@ -120,7 +121,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<SortOption>(
-                        initialValue: ref.watch(sortOptionProvider),
+                        key: ValueKey(currentSortOption),
+                        initialValue: currentSortOption,
                         decoration: const InputDecoration(
                           labelText: 'Sort',
                           prefixIcon: Icon(Icons.swap_vert_rounded),

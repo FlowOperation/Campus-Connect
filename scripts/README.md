@@ -8,3 +8,7 @@ Recommended conventions:
 - Keep scripts idempotent and non-interactive.
 - Add usage examples at the top of each script.
 - Prefer scripts for complex multi-step commands reused in CI.
+
+Current local setup helper:
+
+- `fetch_firebase_mobile_config.sh`: downloads local Android and iOS Firebase service files without rewriting tracked repo config.

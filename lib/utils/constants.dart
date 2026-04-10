@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // App Colors
 class AppColors {
-  static const primary = Color(0xFFFF4500);
+  static const primary = Color(0xFFC53B00);
   static const accent = Color(0xFF0079D3);
   static const background = Color(0xFFF6F7F8);
   static const cardBackground = Colors.white;
@@ -12,6 +12,24 @@ class AppColors {
   static const border = Color(0xFFE6E7E8);
   static const error = Color(0xFFD93900);
   static const success = Color(0xFF2E7D32);
+
+  static Color accessibleForeground(Color background) {
+    final lightContrast = _contrastRatio(Colors.white, background);
+    final darkContrast = _contrastRatio(textPrimary, background);
+    return lightContrast >= darkContrast ? Colors.white : textPrimary;
+  }
+
+  static double _contrastRatio(Color foreground, Color background) {
+    final foregroundLuminance = foreground.computeLuminance();
+    final backgroundLuminance = background.computeLuminance();
+    final lighter = foregroundLuminance > backgroundLuminance
+        ? foregroundLuminance
+        : backgroundLuminance;
+    final darker = foregroundLuminance > backgroundLuminance
+        ? backgroundLuminance
+        : foregroundLuminance;
+    return (lighter + 0.05) / (darker + 0.05);
+  }
 }
 
 // Post Categories

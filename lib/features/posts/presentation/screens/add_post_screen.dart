@@ -157,32 +157,47 @@ class _AddPostScreenState extends ConsumerState<AddPostScreen> {
                         children: PostCategory.all.map((category) {
                           final isSelected = _selectedCategory == category;
                           final chipColor = PostCategory.getColor(category);
-                          return ChoiceChip(
-                            label: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  PostCategory.getIcon(category),
-                                  size: 16,
-                                  color: isSelected ? Colors.white : chipColor,
-                                ),
-                                const SizedBox(width: 6),
-                                Text(category),
-                              ],
-                            ),
+                          final foregroundColor =
+                              AppColors.accessibleForeground(chipColor);
+                          return Semantics(
+                            button: true,
                             selected: isSelected,
-                            onSelected: (selected) {
-                              if (selected) {
-                                setState(() => _selectedCategory = category);
-                              }
-                            },
-                            selectedColor: chipColor,
-                            backgroundColor: chipColor.withOpacity(0.12),
-                            labelStyle: TextStyle(
-                              color: isSelected ? Colors.white : chipColor,
-                              fontWeight: FontWeight.w700,
+                            label: 'Select $category category',
+                            child: ExcludeSemantics(
+                              child: ChoiceChip(
+                                label: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      PostCategory.getIcon(category),
+                                      size: 16,
+                                      color: isSelected
+                                          ? foregroundColor
+                                          : chipColor,
+                                    ),
+                                    const SizedBox(width: 6),
+                                    Text(category),
+                                  ],
+                                ),
+                                selected: isSelected,
+                                onSelected: (selected) {
+                                  if (selected) {
+                                    setState(
+                                      () => _selectedCategory = category,
+                                    );
+                                  }
+                                },
+                                selectedColor: chipColor,
+                                backgroundColor: chipColor.withAlpha(31),
+                                labelStyle: TextStyle(
+                                  color: isSelected
+                                      ? foregroundColor
+                                      : chipColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                showCheckmark: false,
+                              ),
                             ),
-                            showCheckmark: false,
                           );
                         }).toList(),
                       ),

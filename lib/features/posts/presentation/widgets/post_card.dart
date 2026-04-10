@@ -85,9 +85,10 @@ class PostCard extends ConsumerWidget {
                       ],
                     ),
                   ),
-                  _CategoryBadge(category: post.category),
                 ],
               ),
+              const SizedBox(height: AppSpacing.sm),
+              _CategoryBadge(category: post.category),
               const SizedBox(height: AppSpacing.md),
               Text(
                 post.title,
@@ -125,47 +126,81 @@ class PostCard extends ConsumerWidget {
                 ),
               ],
               const SizedBox(height: AppSpacing.md),
-              Row(
+              Wrap(
+                spacing: AppSpacing.md,
+                runSpacing: AppSpacing.xs,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  _ActionIcon(
-                    icon: Icons.arrow_upward_rounded,
-                    color: isUpvoted ? Colors.orange : AppColors.textSecondary,
-                    onTap: currentUser == null
-                        ? null
-                        : () => firestoreService.toggleUpvote(
-                            post.id,
-                            currentUser.uid,
-                          ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _ActionIcon(
+                        icon: Icons.arrow_upward_rounded,
+                        color: isUpvoted
+                            ? Colors.orange
+                            : AppColors.textSecondary,
+                        tooltip: isUpvoted ? 'Remove upvote' : 'Upvote post',
+                        semanticLabel: isUpvoted
+                            ? 'Remove upvote'
+                            : 'Upvote post',
+                        isSelected: isUpvoted,
+                        onTap: currentUser == null
+                            ? null
+                            : () => firestoreService.toggleUpvote(
+                                post.id,
+                                currentUser.uid,
+                              ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Text(
+                          '${post.score}',
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
+                                color: scoreColor,
+                                fontWeight: FontWeight.w700,
+                              ),
+                        ),
+                      ),
+                      _ActionIcon(
+                        icon: Icons.arrow_downward_rounded,
+                        color: isDownvoted
+                            ? Colors.blue
+                            : AppColors.textSecondary,
+                        tooltip: isDownvoted
+                            ? 'Remove downvote'
+                            : 'Downvote post',
+                        semanticLabel: isDownvoted
+                            ? 'Remove downvote'
+                            : 'Downvote post',
+                        isSelected: isDownvoted,
+                        onTap: currentUser == null
+                            ? null
+                            : () => firestoreService.toggleDownvote(
+                                post.id,
+                                currentUser.uid,
+                              ),
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Text(
-                      '${post.score}',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: scoreColor,
-                        fontWeight: FontWeight.w700,
+                  Semantics(
+                    label:
+                        '${post.commentCount} ${post.commentCount == 1 ? 'comment' : 'comments'}',
+                    child: ExcludeSemantics(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.comment_outlined,
+                            size: 18,
+                            color: AppColors.textSecondary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text('${post.commentCount}'),
+                        ],
                       ),
                     ),
                   ),
-                  _ActionIcon(
-                    icon: Icons.arrow_downward_rounded,
-                    color: isDownvoted ? Colors.blue : AppColors.textSecondary,
-                    onTap: currentUser == null
-                        ? null
-                        : () => firestoreService.toggleDownvote(
-                            post.id,
-                            currentUser.uid,
-                          ),
-                  ),
-                  const SizedBox(width: AppSpacing.sm),
-                  const Icon(
-                    Icons.comment_outlined,
-                    size: 18,
-                    color: AppColors.textSecondary,
-                  ),
-                  const SizedBox(width: 4),
-                  Text('${post.commentCount}'),
-                  const Spacer(),
                   _ActionIcon(
                     icon: isBookmarked
                         ? Icons.bookmark_rounded
@@ -173,6 +208,11 @@ class PostCard extends ConsumerWidget {
                     color: isBookmarked
                         ? AppColors.primary
                         : AppColors.textSecondary,
+                    tooltip: isBookmarked ? 'Remove bookmark' : 'Bookmark post',
+                    semanticLabel: isBookmarked
+                        ? 'Remove bookmark'
+                        : 'Bookmark post',
+                    isSelected: isBookmarked,
                     onTap: currentUser == null
                         ? null
                         : () => firestoreService.toggleBookmark(
@@ -201,7 +241,7 @@ class _CategoryBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withAlpha(31),
         borderRadius: BorderRadius.circular(999),
       ),
       child: Row(
@@ -225,22 +265,36 @@ class _CategoryBadge extends StatelessWidget {
 class _ActionIcon extends StatelessWidget {
   final IconData icon;
   final Color color;
+  final String tooltip;
+  final String semanticLabel;
+  final bool isSelected;
   final VoidCallback? onTap;
 
   const _ActionIcon({
     required this.icon,
     required this.color,
+    required this.tooltip,
+    required this.semanticLabel,
+    this.isSelected = false,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(999),
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: Icon(icon, size: 20, color: color),
+    return Semantics(
+      button: true,
+      enabled: onTap != null,
+      selected: isSelected,
+      label: semanticLabel,
+      child: ExcludeSemantics(
+        child: IconButton(
+          onPressed: onTap,
+          tooltip: tooltip,
+          padding: const EdgeInsets.all(12),
+          constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+          splashRadius: 24,
+          icon: Icon(icon, size: 20, color: color),
+        ),
       ),
     );
   }

@@ -132,6 +132,8 @@ flutter test
 ## Secret Hygiene (Required)
 
 - Never commit real credentials or API keys.
+- Keep the tracked `firebase.json` file limited to shared repo config such as Firestore rules bindings.
+- Do not commit `lib/firebase_options.dart` if you generate it locally.
 - Keep Firebase local config files untracked:
 	- `android/app/google-services.json`
 	- `ios/Runner/GoogleService-Info.plist`

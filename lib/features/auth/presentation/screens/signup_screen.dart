@@ -131,16 +131,28 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             decoration: InputDecoration(
                               labelText: 'Password',
                               prefixIcon: const Icon(Icons.lock_outline),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(
-                                    () => _obscurePassword = !_obscurePassword,
-                                  );
-                                },
-                                icon: Icon(
-                                  _obscurePassword
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
+                              suffixIcon: Semantics(
+                                button: true,
+                                label: _obscurePassword
+                                    ? 'Show password'
+                                    : 'Hide password',
+                                child: ExcludeSemantics(
+                                  child: IconButton(
+                                    tooltip: _obscurePassword
+                                        ? 'Show password'
+                                        : 'Hide password',
+                                    onPressed: () {
+                                      setState(
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
+                                      );
+                                    },
+                                    icon: Icon(
+                                      _obscurePassword
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
@@ -161,17 +173,28 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                             decoration: InputDecoration(
                               labelText: 'Confirm Password',
                               prefixIcon: const Icon(Icons.lock_reset_rounded),
-                              suffixIcon: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _obscureConfirmPassword =
-                                        !_obscureConfirmPassword;
-                                  });
-                                },
-                                icon: Icon(
-                                  _obscureConfirmPassword
-                                      ? Icons.visibility_outlined
-                                      : Icons.visibility_off_outlined,
+                              suffixIcon: Semantics(
+                                button: true,
+                                label: _obscureConfirmPassword
+                                    ? 'Show confirm password'
+                                    : 'Hide confirm password',
+                                child: ExcludeSemantics(
+                                  child: IconButton(
+                                    tooltip: _obscureConfirmPassword
+                                        ? 'Show confirm password'
+                                        : 'Hide confirm password',
+                                    onPressed: () {
+                                      setState(() {
+                                        _obscureConfirmPassword =
+                                            !_obscureConfirmPassword;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      _obscureConfirmPassword
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),

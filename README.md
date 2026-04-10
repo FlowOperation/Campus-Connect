@@ -42,7 +42,7 @@ Campus Connect follows a feature-module Flutter architecture with shared foundat
 2. Feature modules: `lib/features/<feature>/{presentation,application,domain,infrastructure}`
 3. Shared UI primitives: `lib/shared/`
 4. Existing state/models/services: `lib/providers/`, `lib/models/`, `lib/services/`
-5. Bootstrap/config: `lib/main.dart`, `lib/firebase_options.dart`, `lib/utils/`
+5. Bootstrap/config: `lib/main.dart`, native platform Firebase service files, `lib/utils/`
 
 This keeps UI and feature ownership clear while the remaining non-UI layers are incrementally migrated.
 
@@ -64,14 +64,17 @@ flutter pub get
 flutter run
 ```
 
+This repository ships template Firebase config only. Before first run, configure your own Firebase project locally using `docs/LOCAL_DEVELOPMENT.md`.
+
 For full setup, including Firebase and emulator provisioning, see `docs/LOCAL_DEVELOPMENT.md`.
 
 ## Development Setup
 
 1. Install dependencies: `flutter pub get`
-2. Configure Firebase and local platform setup using `docs/LOCAL_DEVELOPMENT.md`
-3. Apply Firestore rules from `firestore.rules`
-4. Generate platform files and run:
+2. Configure your own Firebase project locally using `docs/LOCAL_DEVELOPMENT.md`
+3. Add local platform files and apply Firestore rules from `firestore.rules`
+4. Optionally fetch mobile config with `bash scripts/fetch_firebase_mobile_config.sh <project-id> <android-app-id> <ios-app-id>`
+5. Run:
 - `flutter doctor`
 - `flutter run`
 
@@ -84,6 +87,8 @@ dart format --output=none --set-exit-if-changed .
 flutter analyze --no-fatal-infos
 flutter test
 ```
+
+For manual semantics, text scaling, contrast, and touch-target verification, use `docs/ACCESSIBILITY_CHECKLIST.md`.
 
 ## Contributing
 
@@ -113,7 +118,6 @@ lib/
   shared/
     widgets/
   main.dart
-  firebase_options.dart
   models/
   providers/
   services/

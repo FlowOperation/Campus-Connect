@@ -116,6 +116,14 @@ Verify package resolution completed successfully. You should not see unresolved 
 
 Campus Connect relies on Firebase for authentication and data.
 
+This repository keeps Firebase runtime config local.
+
+- The tracked `firebase.json` file is shared repo config only.
+- Runtime Firebase mobile service files stay local and untracked.
+- The app uses native Android and iOS config files at startup.
+
+You must configure your own Firebase project locally before the app can run.
+
 ## 3.1 Create or Select a Firebase Project
 
 1. Go to Firebase Console.
@@ -153,23 +161,35 @@ Required file paths:
 Important notes:
 
 - `android/app/google-services.example.json` is only a template.
-- Do not use placeholder values for production testing.
+- `ios/Runner/GoogleService-Info.example.plist` is only a template.
 - Keep real credentials out of public commits.
 
-## 3.5 Generate `lib/firebase_options.dart` (FlutterFire)
+## 3.5 Fetch Local Mobile Config Files
 
-Install and run FlutterFire CLI:
+You have two supported options.
+
+Option A: download files manually from Firebase Console.
+
+Option B: use Firebase CLI to fetch the service files directly.
+
+First list your Firebase app IDs:
 
 ```bash
-dart pub global activate flutterfire_cli
-flutterfire configure
+firebase apps:list --project <project_id>
 ```
 
-During setup:
+Then fetch both mobile config files:
 
-- Select the same Firebase project created above.
-- Select the platforms you will run.
-- Confirm generated file updates in `lib/firebase_options.dart`.
+```bash
+bash scripts/fetch_firebase_mobile_config.sh <project_id> <android_app_id> <ios_app_id>
+```
+
+This writes:
+
+- `android/app/google-services.json`
+- `ios/Runner/GoogleService-Info.plist`
+
+Do not commit those local runtime files.
 
 ## 3.6 Apply Firestore Rules
 
@@ -275,7 +295,25 @@ ls -la android/app/src | grep google-services
 ls -la android/app/src/debug | grep google-services
 ```
 
-## 8.2 Build Cache Issues
+`android/app/google-services.example.json` is not a usable runtime file.
+
+## 8.2 App Shows `Firebase setup required`
+
+If the app opens a Firebase setup screen on launch, your local mobile Firebase files are missing, invalid, or you are running on an unsupported platform.
+
+Fix it by:
+
+1. Register Android and iOS apps in your Firebase project.
+2. Add the downloaded platform files:
+- `android/app/google-services.json`
+- `ios/Runner/GoogleService-Info.plist`
+3. If you prefer CLI setup, run:
+
+```bash
+bash scripts/fetch_firebase_mobile_config.sh <project_id> <android_app_id> <ios_app_id>
+```
+
+## 8.3 Build Cache Issues
 
 If configuration is correct but build still fails:
 
@@ -285,7 +323,7 @@ flutter pub get
 flutter run
 ```
 
-## 8.3 Doctor Still Reports Missing Dependencies
+## 8.4 Doctor Still Reports Missing Dependencies
 
 Re-run:
 

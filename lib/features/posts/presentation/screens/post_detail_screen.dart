@@ -42,6 +42,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
             authorName: currentUser.displayName ?? 'Anonymous',
             authorPhotoUrl: currentUser.photoURL,
           );
+      if (!mounted) return;
       _commentController.clear();
       FocusScope.of(context).unfocus();
     } catch (e) {
@@ -57,6 +58,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
     final currentUser = ref.watch(authStateProvider).value;
     final firestoreService = ref.read(firestoreServiceProvider);
     final commentsAsync = ref.watch(commentsProvider(widget.post.id));
+    final isLargeText = MediaQuery.textScalerOf(context).scale(1) > 1.3;
     final isUpvoted =
         currentUser != null && widget.post.upvotedBy.contains(currentUser.uid);
     final isDownvoted =
@@ -69,6 +71,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
         actions: [
           if (currentUser != null && currentUser.uid == widget.post.authorId)
             PopupMenuButton<String>(
+              tooltip: 'Post options',
               onSelected: (value) async {
                 if (value != 'delete') return;
                 await firestoreService.deletePost(widget.post.id);
@@ -183,35 +186,64 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                             ),
                           ],
                           const SizedBox(height: AppSpacing.md),
-                          Row(
+                          Wrap(
+                            spacing: AppSpacing.sm,
+                            runSpacing: AppSpacing.xs,
+                            crossAxisAlignment: WrapCrossAlignment.center,
                             children: [
-                              IconButton(
-                                onPressed: currentUser == null
-                                    ? null
-                                    : () => firestoreService.toggleUpvote(
-                                        widget.post.id,
-                                        currentUser.uid,
-                                      ),
-                                icon: Icon(
-                                  Icons.arrow_upward_rounded,
-                                  color: isUpvoted
-                                      ? Colors.orange
-                                      : AppColors.textSecondary,
+                              Semantics(
+                                button: true,
+                                enabled: currentUser != null,
+                                selected: isUpvoted,
+                                label: isUpvoted
+                                    ? 'Remove upvote'
+                                    : 'Upvote post',
+                                child: ExcludeSemantics(
+                                  child: IconButton(
+                                    tooltip: isUpvoted
+                                        ? 'Remove upvote'
+                                        : 'Upvote post',
+                                    onPressed: currentUser == null
+                                        ? null
+                                        : () => firestoreService.toggleUpvote(
+                                            widget.post.id,
+                                            currentUser.uid,
+                                          ),
+                                    icon: Icon(
+                                      Icons.arrow_upward_rounded,
+                                      color: isUpvoted
+                                          ? Colors.orange
+                                          : AppColors.textSecondary,
+                                    ),
+                                  ),
                                 ),
                               ),
                               Text('${widget.post.score}'),
-                              IconButton(
-                                onPressed: currentUser == null
-                                    ? null
-                                    : () => firestoreService.toggleDownvote(
-                                        widget.post.id,
-                                        currentUser.uid,
-                                      ),
-                                icon: Icon(
-                                  Icons.arrow_downward_rounded,
-                                  color: isDownvoted
-                                      ? Colors.blue
-                                      : AppColors.textSecondary,
+                              Semantics(
+                                button: true,
+                                enabled: currentUser != null,
+                                selected: isDownvoted,
+                                label: isDownvoted
+                                    ? 'Remove downvote'
+                                    : 'Downvote post',
+                                child: ExcludeSemantics(
+                                  child: IconButton(
+                                    tooltip: isDownvoted
+                                        ? 'Remove downvote'
+                                        : 'Downvote post',
+                                    onPressed: currentUser == null
+                                        ? null
+                                        : () => firestoreService.toggleDownvote(
+                                            widget.post.id,
+                                            currentUser.uid,
+                                          ),
+                                    icon: Icon(
+                                      Icons.arrow_downward_rounded,
+                                      color: isDownvoted
+                                          ? Colors.blue
+                                          : AppColors.textSecondary,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -253,15 +285,22 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                               trailing:
                                   currentUser != null &&
                                       comment.authorId == currentUser.uid
-                                  ? IconButton(
-                                      onPressed: () =>
-                                          firestoreService.deleteComment(
-                                            comment.id,
-                                            widget.post.id,
+                                  ? Semantics(
+                                      button: true,
+                                      label: 'Delete comment',
+                                      child: ExcludeSemantics(
+                                        child: IconButton(
+                                          tooltip: 'Delete comment',
+                                          onPressed: () =>
+                                              firestoreService.deleteComment(
+                                                comment.id,
+                                                widget.post.id,
+                                              ),
+                                          icon: const Icon(
+                                            Icons.delete_outline,
+                                            color: AppColors.error,
                                           ),
-                                      icon: const Icon(
-                                        Icons.delete_outline,
-                                        color: AppColors.error,
+                                        ),
                                       ),
                                     )
                                   : null,
@@ -272,7 +311,7 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                     },
                     loading: () =>
                         const Center(child: CircularProgressIndicator()),
-                    error: (_, __) => const AppEmptyState(
+                    error: (error, stackTrace) => const AppEmptyState(
                       icon: Icons.error_outline,
                       title: 'Could not load comments',
                       subtitle: 'Please try again in a moment.',
@@ -292,24 +331,54 @@ class _PostDetailScreenState extends ConsumerState<PostDetailScreen> {
                   AppSpacing.md,
                   AppSpacing.sm,
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _commentController,
-                        decoration: const InputDecoration(
-                          hintText: 'Add a comment...',
-                        ),
-                        onSubmitted: (_) => _addComment(),
+                child: isLargeText
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextField(
+                            controller: _commentController,
+                            minLines: 1,
+                            maxLines: 4,
+                            decoration: const InputDecoration(
+                              labelText: 'Add a comment',
+                              hintText: 'Share your thoughts',
+                            ),
+                            onSubmitted: (_) => _addComment(),
+                          ),
+                          const SizedBox(height: AppSpacing.sm),
+                          FilledButton.icon(
+                            onPressed: _addComment,
+                            icon: const Icon(Icons.send_rounded),
+                            label: const Text('Post comment'),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              controller: _commentController,
+                              decoration: const InputDecoration(
+                                labelText: 'Add a comment',
+                                hintText: 'Share your thoughts',
+                              ),
+                              onSubmitted: (_) => _addComment(),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Semantics(
+                            button: true,
+                            label: 'Post comment',
+                            child: ExcludeSemantics(
+                              child: IconButton.filled(
+                                tooltip: 'Post comment',
+                                onPressed: _addComment,
+                                icon: const Icon(Icons.send_rounded),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton.filled(
-                      onPressed: _addComment,
-                      icon: const Icon(Icons.send_rounded),
-                    ),
-                  ],
-                ),
               ),
             ),
         ],

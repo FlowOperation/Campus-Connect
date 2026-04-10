@@ -44,7 +44,7 @@ class ProfileScreen extends ConsumerWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFFFF5A1F), Color(0xFFFF4500)],
+                  colors: [AppColors.primary, Color(0xFFA73300)],
                 ),
               ),
               padding: const EdgeInsets.all(AppSpacing.lg),
@@ -73,11 +73,15 @@ class ProfileScreen extends ConsumerWidget {
                     style: Theme.of(
                       context,
                     ).textTheme.titleLarge?.copyWith(color: Colors.white),
+                    textAlign: TextAlign.center,
                   ),
                   Text(
                     currentUser.email ?? '',
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Colors.white.withOpacity(0.92),
+                      color: Colors.white.withAlpha(235),
                     ),
                   ),
                 ],
@@ -86,6 +90,7 @@ class ProfileScreen extends ConsumerWidget {
             Container(
               color: Colors.white,
               child: const TabBar(
+                isScrollable: true,
                 labelColor: AppColors.textPrimary,
                 unselectedLabelColor: AppColors.textSecondary,
                 indicatorColor: AppColors.primary,

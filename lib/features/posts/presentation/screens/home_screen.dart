@@ -29,28 +29,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final filteredPosts = ref.watch(filteredPostsProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
+    final currentSortOption = ref.watch(sortOptionProvider);
     final currentUser = ref.watch(authStateProvider).value;
+    final allChipForeground = AppColors.accessibleForeground(AppColors.primary);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Campus Connect'),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen()),
-              );
-            },
-            icon: CircleAvatar(
-              radius: 14,
-              backgroundColor: AppColors.surfaceMuted,
-              backgroundImage: currentUser?.photoURL != null
-                  ? NetworkImage(currentUser!.photoURL!)
-                  : null,
-              child: currentUser?.photoURL == null
-                  ? const Icon(Icons.person_outline, size: 18)
-                  : null,
+          Semantics(
+            button: true,
+            label: 'Open profile',
+            child: ExcludeSemantics(
+              child: IconButton(
+                tooltip: 'Open profile',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfileScreen(),
+                    ),
+                  );
+                },
+                icon: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: AppColors.surfaceMuted,
+                  backgroundImage: currentUser?.photoURL != null
+                      ? NetworkImage(currentUser!.photoURL!)
+                      : null,
+                  child: currentUser?.photoURL == null
+                      ? const Icon(Icons.person_outline, size: 18)
+                      : null,
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 6),
@@ -82,16 +93,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ref.read(searchQueryProvider.notifier).state = value;
                   },
                   decoration: InputDecoration(
-                    hintText: 'Search posts by title or content',
+                    labelText: 'Search posts',
+                    hintText: 'Search by title or content',
                     prefixIcon: const Icon(Icons.search_rounded),
                     suffixIcon: _searchController.text.isNotEmpty
-                        ? IconButton(
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() {});
-                              ref.read(searchQueryProvider.notifier).state = '';
-                            },
-                            icon: const Icon(Icons.close_rounded),
+                        ? Semantics(
+                            button: true,
+                            label: 'Clear search',
+                            child: ExcludeSemantics(
+                              child: IconButton(
+                                tooltip: 'Clear search',
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() {});
+                                  ref.read(searchQueryProvider.notifier).state =
+                                      '';
+                                },
+                                icon: const Icon(Icons.close_rounded),
+                              ),
+                            ),
                           )
                         : null,
                   ),
@@ -101,7 +121,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     Expanded(
                       child: DropdownButtonFormField<SortOption>(
-                        value: ref.watch(sortOptionProvider),
+                        key: ValueKey(currentSortOption),
+                        initialValue: currentSortOption,
                         decoration: const InputDecoration(
                           labelText: 'Sort',
                           prefixIcon: Icon(Icons.swap_vert_rounded),
@@ -130,14 +151,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ],
                 ),
                 const SizedBox(height: AppSpacing.sm),
-                SizedBox(
-                  height: 52,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(vertical: 2),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: AppSpacing.sm),
+                Wrap(
+                  spacing: AppSpacing.sm,
+                  runSpacing: AppSpacing.sm,
+                  children: [
+                    Semantics(
+                      button: true,
+                      selected: selectedCategory == null,
+                      label: 'Filter posts by all categories',
+                      child: ExcludeSemantics(
                         child: FilterChip(
                           label: const Text('All'),
                           selected: selectedCategory == null,
@@ -146,25 +168,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 null;
                           },
                           selectedColor: AppColors.primary,
-                          backgroundColor: AppColors.primary.withOpacity(0.12),
+                          backgroundColor: AppColors.primary.withAlpha(31),
                           labelStyle: TextStyle(
                             color: selectedCategory == null
-                                ? Colors.white
+                                ? allChipForeground
                                 : AppColors.primary,
                             fontWeight: FontWeight.w700,
                           ),
                           showCheckmark: false,
                           side: BorderSide.none,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: VisualDensity.compact,
                         ),
                       ),
-                      ...PostCategory.all.map(
-                        (category) => CategoryChip(category: category),
-                      ),
-                    ],
-                  ),
+                    ),
+                    ...PostCategory.all.map(
+                      (category) => CategoryChip(category: category),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -206,6 +225,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        tooltip: 'Create a new post',
         onPressed: () {
           Navigator.push(
             context,
